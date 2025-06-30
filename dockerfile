@@ -1,5 +1,5 @@
 From maven:3.8.3-openjdk-17 as bulid
-COPY ..
+COPY . /app
 RUN mvn clean package -DskipTests
 
 From openjdk:17.0.1-jdk-slim
