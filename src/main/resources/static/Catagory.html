@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category</title>
+    <style>
+  /*      * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f2f5, #d9e2ec);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container1 {
+            background: #ffffff;
+            padding: 25px 35px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            font-size: 18px;
+        }
+
+        select {
+            padding: 12px;
+            width: 100%;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 16px;
+            margin-top: 12px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        select:hover,
+        select:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+            outline: none;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+            box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        #categorys {
+            display: none;
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        table {
+            width: auto;
+            align-items: center;
+            margin: 10px auto;
+            border-collapse: collapse;
+            border-radius: 8px;
+            display: none;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+            justify-content: flex-end;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+        }
+
+            button, select {
+                font-size: 15px;
+            }*/
+  button {
+      background: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 20px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+  }
+
+  button:hover {
+      background: #0056b3;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.4);
+  }
+
+  #addQuestionResult {
+      text-align: center;
+      color: green;
+      font-weight: 500;
+      margin-top: 10px;
+  }
+
+  .container {
+      padding: 25px 35px;
+      border-radius: 12px;
+      width: 100%;
+      text-align: center;
+  }
+
+  #totaltable{
+      /*display: none;*/
+      gap: 15px;
+      flex-grow: 1;
+      background: rgba(255, 255, 255, 0.12);
+      float: right;
+      margin-top: 50px;
+      margin-right: 100px;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      flex-direction: column;
+      width: 800px;
+
+  }
+  table {
+      width: auto;
+      align-items: center;
+      margin: 10px auto;
+      border-collapse: collapse;
+      border-radius: 8px;
+      display: none;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background-color: #fff;
+      justify-content: flex-end;
+  }
+
+  th, td {
+      padding: 12px 15px;
+      border: 1px solid #dee2e6;
+      font-size: 15px;
+      text-align: center;
+  }
+
+  th {
+      background-color: #007bff;
+      color: white;
+  }
+
+
+
+  button, select {
+      font-size: 15px;
+  }
+
+  table {
+      width: 100%;
+      margin: 10px 0;
+      border-collapse: collapse;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+      padding: 12px 15px;
+      border: 1px solid #dee2e6;
+      font-size: 15px;
+      text-align: center;
+  }
+
+  th {
+      /*background-color: #007bff;*/
+      color: white;
+  }
+
+
+    </style>
+
+</head>
+<body>
+<div class="container1">
+    <div id="forlabel">
+    <label for="category">Search By Category:</label><br><br>
+    <select id="category">
+        <option value="none">Select</option>
+        <option value="java">java</option>
+        <option value="python">python</option>
+        <option value="science">science</option>
+        <option value="general">general</option>
+    </select><br><br>
+    <button onclick="ShowByCategory()">submit</button>
+    </div>
+<table id="questiontable">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>Category</td>
+        <td>Question</td>
+        <td>Option 1</td>
+        <td>Option 2</td>
+        <td>Option 3</td>
+        <td>Option 4</td>
+        <td>Correct Answer</td>
+    </tr>
+    </thead>
+    <tbody id="innertable"></tbody>
+</table>
+</div>
+</body>
+</html>
+<script>
+    const questionBase = "http://localhost:8080/question";
+
+    async function ShowByCategory() {
+        const selected = document.getElementById("category").value;
+        const list1=document.getElementById("questiontable1")
+
+        if (selected === "none") {
+            alert("Please select a category.");
+            return;
+            }
+        try {
+            const res = await fetch(`${questionBase}/category/${selected}`);
+            const data = await res.json();
+            const list = document.getElementById("innertable1");
+
+
+            if(data.length === 0){
+                alert("No question is available in this category")
+                list1.style.display="none";
+            }
+            else {
+                list1.style.display = "block"
+               }
+            list.innerHTML = "";
+            data.forEach(q => {
+                const row = `<tr>
+                                    <td>${q.id}</td>
+                                    <td>${q.category}</td>
+                                    <td>${q.questionTitle}</td>
+                                    <td>${q.option1}</td>
+                                    <td>${q.option2}</td>
+                                    <td>${q.option3}</td>
+                                    <td>${q.option4}</td>
+                                    <td>${q.rightAnswer}</td>
+                                  </tr>`
+                list.innerHTML += row;
+            });
+        } catch (error) {
+            console.error("Error fetching questions:", error);
+            alert("Failed to fetch questions. Please try again.");
+        }
+    }
+</script>

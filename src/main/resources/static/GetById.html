@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GetById</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            font-family: Arial, sans-serif;
+            background-color: #f4f8fc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-collapse: collapse;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+
+    h3 {
+    color: #0b3d91;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    }
+
+    input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 250px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    button {
+    padding: 10px 16px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    width: 120px;
+    font-size: 16px;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+    margin-left: 10px;
+    }
+
+    button:hover {
+    background: #0056b3;
+    }
+
+        table {
+            width: auto;
+            align-items: center;
+            margin: 10px auto;
+            border-collapse: collapse;
+            display: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+            justify-content: flex-end;
+        }
+
+    th, td {
+    padding: 12px 15px;
+    border: 1px solid #dee2e6;
+    font-size: 15px;
+    text-align: center;
+    }
+
+    th {
+    background-color: #007bff;
+    color: white;
+    }
+
+    tr:nth-child(even) {
+    background-color: #f8f9fa;
+    }
+
+    tr:hover {
+    background-color: #e9ecef;
+    }
+    </style>
+</head>
+<body>
+<!-- get by the id -->
+<div class="mb-5">
+    <h3>Take Quiz</h3>
+    <input id="quizId" class="form-control mb-2" placeholder="Enter Quiz ID" />
+    <button class="btn btn-secondary" onclick="loadQuiz()">Load Quiz</button>
+</div>
+<table id="questiontable">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>Category</td>
+        <td>Question</td>
+        <td>Option 1</td>
+        <td>Option 2</td>
+        <td>Option 3</td>
+        <td>Option 4</td>
+        <td>Correct Answer</td>
+    </tr>
+    </thead>
+    <tbody id="innertable"></tbody>
+</table>
+</body>
+</html>
+<script>
+    // const questionBath ="http://localhost:8080/Quiz"
+
+        async function loadQuiz() {
+            const list = document.getElementById("questiontable");
+
+
+            const id=document.getElementById("quizId").value
+        if(id === "none" ||id.trim() === ""){
+            alert("Please enter a valid ID");
+            return;
+        }
+
+        try {
+            const res = await fetch(`http://localhost:8080/question/get/${id}`);
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const q = await res.json();
+            if(q === "none") {
+                list.style.display = "none";
+                alert("No question is available in this id")
+            }
+            else {
+                list.style.display = "block"
+            }
+            const table = document.getElementById("innertable");
+
+            table.innerHTML = "";
+                    const row = `<tr>
+                                    <td>${q.id}</td>
+                                    <td>${q.category}</td>
+                                    <td>${q.questionTitle}</td>
+                                    <td>${q.option1}</td>
+                                    <td>${q.option2}</td>
+                                    <td>${q.option3}</td>
+                                    <td>${q.option4}</td>
+                                    <td>${q.rightAnswer}</td>
+                                  </tr>`
+                    table.innerHTML += row;
+        } catch(error)
+            {
+                alert("Failed to fetch question: ");
+            }
+        }
+</script>

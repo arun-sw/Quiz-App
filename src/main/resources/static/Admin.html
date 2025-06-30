@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Quiz App</title><style>
+    /* Reset styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #1e1e2f 0%, #121212 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        color: #f1f1f1;
+        overflow: hidden;
+        height: 100vh;
+    }
+
+    .main-grid {
+        display: flex;
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        margin-top: 0;
+        margin-left: 0;
+        padding: 20px;
+        min-width: 250px;
+        height: 100vh;;
+        overflow:auto;
+        flex-direction: column;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-card h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #ffffff;
+    }
+
+    button,.btn {
+        display: block;
+        background: linear-gradient(to right, #7f5af0, #6246ea); /* Vera-inspired colors */
+        color: white;
+        padding: 10px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(to right, #6246ea, #7f5af0);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(127, 90, 240, 0.6);
+    }
+
+
+    .rightSide {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        gap: 20px;
+    }
+
+    .addQuestionCard,
+    .containerForDel,
+    .form-container,
+    .container1,
+    .container2,
+    #allquestiontable,
+    #questionTable1,
+    #questionTable2,
+    #totalTable,
+    #Ans {
+        display: none;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    input, select, button {
+        margin-top: 10px;
+        display: flex;
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #333;
+        border-radius: 8px;
+        font-size: 1rem;
+        background-color: #2b2b3c;
+        color: #f1f1f1;
+    }
+
+    button {
+        background-color: #00c6ff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0072ff;
+    }
+
+    h3, h2 {
+        margin-bottom: 15px;
+        color: #ffffff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: #1f1f2f;
+        color: #f1f1f1;
+        background: linear-gradient(135deg, #1e1e2f 0%, #121212 100%);
+    }
+
+    th, td {
+        padding: 12px 15px;
+        border: 1px solid #333;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+
+    th {
+        background-color: #00c6ff;
+        color: white;
+    }
+
+
+
+    #btt button {
+        display: flex;
+        align-items: center;
+    }
+
+    .btnbtn-info {
+        background: #43e97b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btnbtn-info:hover {
+        background: #38f9d7;
+    }
+    #questionTable{
+        display: none;
+    }
+    #addQuestionResult,#result,#update {
+        margin-top: 15px;
+        font-size: 14px;
+        text-align: center;
+        color: #00ff88; /* success green */
+    }
+</style>
+
+</head>
+<body>
+<div class="main-grid">
+<div class="glass-card">
+    <h1>Select you need</h1>
+    <a href="#" onclick="addthequiz()" class="btn">Add The question</a><br>
+    <a href="#" onclick="allquiz()" class="btn">All question</a><br>
+    <a href="#" onclick="aquizAns()" class="btn">Show All question and answer</a><br>
+    <a href="#" onclick="deletefunc()" class="btn">Delete</a><br>
+    <a href="#" onclick="updatefun()" class="btn">Update Question</a><br>
+    <a href="#" onclick="showbycate()" class="btn">Show by category</a><br>
+    <a href="#" onclick="showbyid()" class="btn">Get The By The ID</a><br>
+    <a href="#" onclick="logout()" class="btn">Log Out</a><br>
+
+</div>
+
+<!-- Right Side -->
+    <div class="rightSide">
+        <div class="addQuestionCard">
+            <h3>Add New Question</h3>
+            <input id="questionText" placeholder="Question" />
+            <input id="questionCategory" placeholder="Category" />
+            <input id="option1" placeholder="Option 1" />
+            <input id="option2" placeholder="Option 2" />
+            <input id="option3" placeholder="Option 3" />
+            <input id="option4" placeholder="Option 4" />
+            <input id="correctAnswer" placeholder="Correct Answer" />
+            <input id="Difficult Level" placeholder="Difficult Level" />
+            <button onclick="addQuestion()">Add Question</button>
+            <p id="addQuestionResult"></p>
+        </div>
+
+<!--    All Questions Panel -->
+    <div id="totalTable">
+        <div id="container">
+            <h3>Click to view all questions</h3>
+            <button onclick="loadAllquiz()">Submit</button>
+        </div>
+        <table id="allquestiontable">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>Category</td>
+                <td>Question</td>
+                <td>Option 1</td>
+                <td>Option 2</td>
+                <td>Option 3</td>
+                <td>Option 4</td>
+                <td>Correct Answer</td>
+            </tr>
+            </thead>
+            <tbody id="innertable"></tbody>
+        </table>
+    </div>
+
+<!-- quiz and answer panal-->
+    <div id="Ans">
+        <div id="btt">
+        <h1>All Questions</h1>
+        <button class="btnbtn-info " onclick="loadAllQuestions()">Load All</button>
+        </div>
+        <table id="questionTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Question</th>
+                <th>Correct Answer</th>
+                <th>Category</th>
+            </tr>
+            </thead>
+            <tbody id="allQuestions">
+            </tbody>
+        </table></div>
+
+<!--delete -->
+    <div class="containerForDel">
+        <label>Enter The Delete id </label>
+        <input type="number" for="id" id="id">
+        <button onclick="deleted()">Delete</button>
+        <p id="result"></p>
+    </div>
+
+<!--   update-->
+    <div class="form-container">
+        <div class="inline">
+            <h2>Update Question</h2>
+            <input id="IDForUp" placeholder="Enter ID to edit">
+            <button onclick="loadQuiz()" class="btnforup">Load Quiz</button>
+            <button onclick="location.reload()" class="btnof">clear</button>
+        </div>
+        <form >
+            <label>Question:</label><br>
+            <input type="text" name="questionTitle" id="questionTextup"><br>
+
+            <label>Option 1:</label><br>
+            <input type="text" name="option1" id="option1up"><br>
+
+            <label>Option 2:</label><br>
+            <input type="text" name="option2" id="option2up"><br>
+
+            <label>Option 3:</label><br>
+            <input type="text" name="option3" id="option3up"><br>
+
+            <label>Option 4:</label><br>
+            <input type="text" name="option4" id="option4up"><br>
+
+            <label>Correct Answer:</label><br>
+            <input type="text" name="correctAnswer" id="correctAnswerup"><br><br>
+
+            <button type="submit" class="btnforup" onclick="updateQuiz()">Update</button>
+            <p id="update"></p>
+        </form>
+    </div>
+
+
+<!--  show the category -->
+  <div class="container1">
+        <label for="category">Search By Category:</label><br><br>
+      <select id="category">
+          <option value="none">Select</option>
+      </select>
+        <button onclick="ShowByCategory()">submit</button>
+    </div>
+    <table id="questionTable1">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Category</td>
+            <td>Question</td>
+            <td>Option 1</td>
+            <td>Option 2</td>
+            <td>Option 3</td>
+            <td>Option 4</td>
+            <td>Correct Answer</td>
+        </tr>
+        </thead>
+        <tbody id="innerTable1"></tbody>
+    </table>
+
+
+
+
+<!--     get by the id -->
+    <div class="container2">
+        <h3>Take Quiz</h3>
+        <input id="quizId" class="form-control mb-2" placeholder="Enter Quiz ID" />
+        <button class="btn btn-secondary" onclick="loadquiz()">Load Quiz</button>
+    </div>
+    <table id="questionTable2">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Category</td>
+            <td>Question</td>
+            <td>Option 1</td>
+            <td>Option 2</td>
+            <td>Option 3</td>
+            <td>Option 4</td>
+            <td>Correct Answer</td>
+        </tr>
+        </thead>
+        <tbody id="innertable2"></tbody>
+    </table>
+</div>
+</div>
+</body>
+</html>
+<script>
+    function addthequiz() {
+        hideAll();
+        document.querySelector(".addQuestionCard").style.display = "block";
+    }
+
+    function allquiz() {
+        hideAll();
+        document.getElementById("totalTable").style.display = "block";
+    }
+
+    function aquizAns() {
+        hideAll();
+        document.getElementById("Ans").style.display = "block";
+    }
+
+    function deletefunc() {
+        hideAll();
+        document.querySelector(".containerForDel").style.display = "block";
+    }
+
+    function updatefun() {
+        hideAll();
+        document.querySelector(".form-container").style.display = "block";
+    }
+
+    function showbycate() {
+        hideAll();
+        document.querySelector(".container1").style.display = "block";
+    }
+
+    function showbyid() {
+        hideAll();
+        document.querySelector(".container2").style.display = "block";
+    }
+
+    function hideAll() {
+        const panels = document.querySelectorAll('.addQuestionCard, .containerForDel, .form-container, .container1, .container2, #totalTable,#questionTable1, #Ans');
+        panels.forEach(p => p.style.display = 'none');
+    }
+    function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+
+        console.log("User logged out.");
+
+        window.location.href = "index.html";
+    }
+
+
+</script>
+<script src="fullScript.js"></script>

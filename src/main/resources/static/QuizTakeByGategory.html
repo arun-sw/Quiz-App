@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Take Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #f1f1f1;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container, .Quizbox {
+            background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 700px;
+            margin: 20px auto;
+        }
+        .Quizbox{
+         display: none;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f1f1f1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2a2a2a;
+            color: #fff;
+            font-size: 16px;
+        }
+        select{
+        margin-top: 10px;
+        display: flex;
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #333;
+        border-radius: 8px;
+        font-size: 1rem;
+        background-color: #2b2b3c;
+        color: #f1f1f1;
+        }
+
+
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #7f5af0, #6246ea); /* Vera-inspired colors */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #6246ea, #7f5af0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(127, 90, 240, 0.6);        }
+
+        .quiz-item {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.05);
+        }
+
+        .question-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            margin: 5px 0;
+            padding: 10px;
+            background: #0e0e0e;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .options label:hover {
+            background: linear-gradient(to right, #7f5af0, #6246ea);
+        }
+
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            margin-bottom: 8px;
+        }
+
+        #button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container, .Quizbox {
+                padding: 15px;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="container">
+        <div class="quiz-box">
+            <h3>Take Quiz</h3>
+        <select id="category">
+                <option value="nane">Select</option>
+            </select>
+            <button class="btn" onclick="loadQuiz()">Load Quiz</button>
+            <button class="btn" onclick="clearcategory()">Clear</button>
+        </div>
+    </div>
+
+    <div class="Quizbox">
+        <div class="question-box">
+        </div>
+        <div id="button">
+            <button class="btn" onclick="submit()">Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadQuiz() {
+        const quizBox = document.querySelector(".Quizbox");
+        const quizContent = document.querySelector(".question-box");
+        const selected = document.getElementById("category").value.trim();
+        let questions = [];
+
+
+        if (!selected) {
+            alert("Please enter a valid category.");
+            quizContent.style.display = "none";
+            return;
+        }
+
+        try {
+            const res = await fetch(`http://localhost:8080/User/Take/Quiz/${encodeURIComponent(selected)}`);
+            questions = await res.json();
+            console.log( questions.length);
+
+
+            if (!questions || questions.length === 0) {
+                alert("Data Not found1");
+                quizBox.style.display = "none";
+                return;
+            }
+            else {
+                quizBox.style.display = "block";
+            }
+
+            quizContent.innerHTML = "";
+
+            questions.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `
+                <div class="question-title">${index + 1}. ${q.questionTitle}</div>
+                <div class="options">
+                    <label><input type="radio" name="q${q.id}" value="${q.option1}"> ${q.option1}</label>
+                    <label><input type="radio" name="q${q.id}" value="${q.option2}"> ${q.option2}</label>
+                    <label><input type="radio" name="q${q.id}" value="${q.option3}"> ${q.option3}</label>
+                    <label><input type="radio" name="q${q.id}" value="${q.option4}"> ${q.option4}</label>
+                </div>
+            `;
+                quizContent.appendChild(div);
+            });
+
+
+            document.getElementById("button").innerHTML = `
+                <button class="btn" onclick="submit()">Submit</button>
+            `;
+        } catch (error) {
+            console.error("Error fetching questions:", error);
+            alert("Failed to fetch questions. Please try again.");
+        }
+    }
+
+    async function submit() {
+        const quizElements = document.querySelectorAll('.question');
+        const answers = [];
+
+        quizElements.forEach((div, index) => {
+            const selected = div.querySelector('input[type="radio"]:checked');
+            const questionId = selected
+                ? parseInt(selected.name.replace('q', ''))
+                : null;
+            answers.push({
+                questionId: questionId,
+                selectedAnswer: selected ? selected.value : null
+            });
+        });
+
+        if (answers.some(ans => ans.selectedAnswer === null)) {
+            alert("Please select an answer for each question.");
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:8080/User/submit/Quiz", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(answers)
+            });
+
+            const result = await res.json();
+            localStorage.setItem("quizResult", JSON.stringify(result));
+            window.location.href = "Scorebord.html";
+        } catch (error) {
+            console.error("Submission failed:", error);
+            alert("Error submitting quiz.");
+        }
+    }
+
+    function clearcategory() {
+        document.getElementById("category").value = "";
+        document.querySelector(".Quizbox").style.display = "none";
+    }
+    // category
+    window.onload = function () {
+        fetch("http://localhost:8080/question/categories") // Your Spring Boot endpoint
+            .then(response => response.json())
+            .then(data => {
+                const dropdown = document.getElementById("category");
+                data.forEach(category => {
+                    const option = document.createElement("option");
+                    option.value = category;
+                    option.text = category;
+                    dropdown.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+            });
+    };
+</script>
+</body>
+</html>

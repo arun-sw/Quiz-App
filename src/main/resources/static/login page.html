@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login & Register - Quiz App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #f1f1f1;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .auth-container {
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            background-color: #2c2c2c;
+            border: 1px solid #555;
+            color: #fff;
+        }
+
+        .form-control::placeholder {
+            color: #bbb;
+        }
+
+        .form-control:focus {
+            border-color: #ff7eb3;
+            box-shadow: 0 0 0 0.2rem rgba(255, 126, 179, 0.25);
+        }
+
+        .btn {
+            background: linear-gradient(to right, #7f5af0, #6246ea); /* Vera-inspired colors */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #6246ea, #7f5af0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(127, 90, 240, 0.6);
+
+        }
+
+        .toggle {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .toggle a {
+            color: #ff7eb3;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <h2 id="form-title">Login</h2>
+    <div class="mb-3">
+        <input type="text" id="username" class="form-control" placeholder="Username" required>
+    </div>
+    <div class="mb-3">
+        <input type="password" id="password" class="form-control" placeholder="Password" required>
+    </div>
+    <div class="text-center">
+        <button class="btn w-100 mb-3" onclick="handleSubmit()">Login</button>
+    </div>
+    <div class="toggle">
+        <span id="toggle-text">Don't have an account? <a onclick="toggleForm()">Register</a></span>
+    </div>
+</div>
+
+<script>
+    let isLogin = true;
+
+    function toggleForm() {
+        isLogin = !isLogin;
+        document.getElementById('form-title').innerText = isLogin ? 'Login' : 'Register';
+        document.querySelector('.btn').innerText = isLogin ? 'Login' : 'Register';
+        document.getElementById('toggle-text').innerHTML = isLogin
+            ? `Don't have an account? <a onclick="toggleForm()">Register</a>`
+            : `Already have an account? <a onclick="toggleForm()">Login</a>`;
+    }
+
+    async function handleSubmit() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        if (!username || !password) {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        const endpoint = isLogin ? "login" : "register";
+
+        const res = await fetch(`http://localhost:8080/api/${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
+
+        const msg = await res.text();
+
+        if (res.ok) {
+            if (isLogin && msg.includes("Success")) {
+                window.location.href = "Admin.html";
+            }
+            else {
+                alert(msg)
+            }
+        } else {
+            alert("Server error. Try again.");
+        }
+    }
+</script>
+</body>
+</html>

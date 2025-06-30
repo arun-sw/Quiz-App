@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 30px;
+
+              display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif;
+         }
+
+            .mb-5 {
+                text-align: center;
+            }
+
+
+        h3 {
+            color: #333;
+        }
+        input[type="text"],
+        input[type="number"] {
+            display: block;
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<!-- create the quiestion -->
+<form class="mb-5">
+    <h3>Create a Quiz</h3>
+    <input id="title" class="form-control mb-2" placeholder="Quiz Title" /><br>
+    <input id="category" class="form-control mb-2" placeholder="Category (e.g., Java)" /><br>
+    <input id="numQuestions" type="number" class="form-control mb-3" placeholder="Number of Questions" /><br>
+    <button class="btn btn-primary" onclick="createQuiz()">Create Quiz</button>
+    <p id="createResult" class="mt-2 text-success"></p>
+</form>
+</body>
+</html>
+<script>
+
+    const quizBase = "http://localhost:8080/quiz";
+
+    // create the quistion
+    async function createQuiz() {
+        const title = document.getElementById("title").value;
+        const category = document.getElementById("category").value;
+        const numQ = document.getElementById("numQuestions").value;
+
+        const res = await fetch(`${quizBase}/create?category=${category}&numQ=${numQ}&title=${title}`, {
+            method: "POST"
+        });
+
+        document.getElementById("createResult").textContent = await res.text();
+    }
+
+</script>
+

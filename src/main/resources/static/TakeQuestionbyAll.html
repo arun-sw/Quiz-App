@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Take Quiz</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #0e0e0e;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ffffff;
+        }
+
+        .question {
+            margin-bottom: 30px;
+        }
+
+        .question-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            margin: 5px 0;
+            padding: 10px;
+            background: #0e0e0e;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .options label:hover {
+            background: linear-gradient(to right, #7f5af0, #6246ea);
+        }
+
+        #quizContainer{
+            justify-content: space-between;
+
+        }
+        button {
+            background: linear-gradient(to right, #7f5af0, #6246ea); /* Vera-inspired colors */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #6246ea, #7f5af0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(127, 90, 240, 0.6);        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Take a Quiz</h1>
+    <div id="quizContainer"></div>
+    <button class="submit-btn" onclick="submitQuiz()">Submit</button>
+    <button class="refresh" onclick="refresh()">Refresh</button>
+</div>
+
+<script>
+    const baseURL = 'http://localhost:8080/User/Take/Question';
+    let questions = [];
+
+    async function loadQuestions() {
+        try {
+            const response = await fetch(baseURL);
+            questions = await response.json();
+            displayQuestions();
+        } catch (error) {
+            console.error('Error loading questions:', error);
+        }
+    }
+
+    function displayQuestions() {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.innerHTML = '';
+
+        questions.forEach((q, index) => {
+            const div = document.createElement('div');
+            div.className = 'question';
+            div.innerHTML = `
+                <div class="question-title">${index + 1}. ${q.questionTitle}</div>
+                <div class="options">
+                    <label><input type="radio" name="q${q.id}" value="${q.option1}"> ${q.option1}</label>
+                    <label><input type="radio" name="q${q.id}" value="${q.option2}"> ${q.option2}</label>
+                    <label><input type="radio" name="q${q.id}" value="${q.option3}"> ${q.option3}</label>
+                    <label><input type="radio" name="q${q.id}" value="${q.option4}"> ${q.option4}</label>
+                </div>
+            `;
+            quizContainer.appendChild(div);
+        });
+    }
+
+    async function submitQuiz() {
+        const answers = questions.map(q => {
+            const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+            return {
+                questionId: q.id,
+                selectedAnswer: selected ? selected.value : null
+            };
+        });
+
+        // Check if all questions have been answered
+        if (answers.some(ans => ans.selectedAnswer === null)) {
+            alert("Please select an answer for each question.");
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:8080/User/submit/Quiz", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(answers)
+            });
+
+            const result = await res.json();
+            localStorage.setItem("quizResult", JSON.stringify(result));
+            window.location.href = "Scorebord.html";
+        } catch (error) {
+            console.error("Submission failed:", error);
+            alert("Error submitting quiz.");
+        }
+    }
+    loadQuestions();
+
+    function refresh(){
+        location.reload();
+    }
+</script>
+
+</body>
+</html>

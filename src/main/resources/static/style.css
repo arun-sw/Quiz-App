@@ -1,0 +1,97 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to top right, #3d2b10, #145374); /* sunset orange to deep blue */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    overflow: auto;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease;
+}h2 {
+    margin-bottom: 20px;
+    font-size: 26px;
+    letter-spacing: 1px;
+}
+.small-button  {
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(to right, #ff6a7f, #ff94c2);
+}
+
+/*view the all quiz*/
+#totaltable{
+    display: none;
+    gap: 15px;
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.12);
+    float: right;
+    margin-top: 50px;
+    margin-right: 90px;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    overflow-scrolling: auto;
+    width: 600px;
+
+}
+table {
+    width: auto;
+    align-items: center;
+    margin: 10px auto;
+    border-collapse: collapse;
+    border-radius: 8px;
+    display: none;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #fff;
+    justify-content: flex-end;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #dee2e6;
+    font-size: 15px;
+    text-align: center;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tr:hover {
+    background-color: #e9ecef;
+}
+
+button, select {
+    font-size: 15px;
+}

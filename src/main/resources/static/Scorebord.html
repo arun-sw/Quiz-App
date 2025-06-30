@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Scoreboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .score-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 20px;
+        }
+
+        .progress-ring__background {
+            fill: none;
+            stroke: #333;
+            stroke-width: 10;
+        }
+
+        .progress-ring__circle {
+            fill: none;
+            stroke: #00bfa6;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 0.35s;
+        }
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: bold;
+            color: #00bfa6;
+        }
+        .small-button {
+            background: linear-gradient(to right, #7f5af0, #6246ea);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(to right, #6246ea, #7f5af0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(127, 90, 240, 0.6);
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <h2>Quiz Result</h2>
+    <div id="scoreBoard" class="score-container" style="display: none;">
+        <svg width="160" height="160">
+            <circle class="progress-ring__background" cx="80" cy="80" r="50" />
+            <circle class="progress-ring__circle" cx="80" cy="80" r="50" />
+        </svg>
+        <div class="score-text" id="scoreText">0</div>
+    </div>
+        <button class="small-button" onclick="reattempt()">Reattempt</button>
+
+</div><br>
+
+<script>
+    function setScore(score) {
+        const circle = document.querySelector('.progress-ring__circle');
+        const radius = circle.r.baseVal.value;
+        const circumference = 2 * Math.PI * radius;
+
+        circle.style.strokeDasharray = `${circumference}`;
+        const offset = circumference - (score / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+
+        document.getElementById('scoreText').textContent = `${score}`;
+    }
+
+        window.onload = function () {
+            const result = JSON.parse(localStorage.getItem("quizResult"));
+            const scoreboard = document.getElementById("scoreBoard");
+
+            if (!result) {
+                scoreboard.style.display="block";
+                scoreboard.textContent = "No result found.";
+                return;
+            }
+
+            let correctCount = 0;
+            result.forEach(item => {
+                if (item.correct) correctCount++;
+            });
+
+            const score = Math.round((correctCount / result.length) * 100);
+             scoreboard.style.display="block";
+             setScore(score)
+    }
+        function reattempt() {
+        window.location.href = "User.html";
+    }
+</script>
+
+</body>
+</html>
