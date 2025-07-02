@@ -83,7 +83,7 @@
 </div>
 
 <script>
-    const baseURL = 'http://localhost:8080/User/Take/Question';
+     const baseURL = "https://wholesome-fascination-production.up.railway.app";
     let questions = [];
 
     async function loadQuestions() {
@@ -132,7 +132,7 @@
         }
 
         try {
-            const res = await fetch("http://localhost:8080/User/submit/Quiz", {
+            const res = await fetch(`${baseURL}/User/submit/Quiz`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
