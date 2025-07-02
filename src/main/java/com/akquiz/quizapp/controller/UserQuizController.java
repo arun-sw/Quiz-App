@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("User")
 @CrossOrigin(origins = "*")
+@RequestMapping("User")
 public class UserQuizController {
 
     @Autowired
